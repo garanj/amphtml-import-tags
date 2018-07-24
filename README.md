@@ -1,4 +1,4 @@
-# Gulp AMPHTML tag importer
+# Gulp AMP HTML tag importer
 
 A Gulp plugin for automating the import of required `custom-element` `<script/>` tags in [AMPHTML files](https://ampproject.org).
 
@@ -14,52 +14,57 @@ npm install --save-dev amphtml-import-tags
 
 1.  Add placeholder to your source files:
 
-	```html
-	<!doctype html>
-	<html amp lang="en">
-	  <head>
-	    <meta charset="utf-8">
-	    ${ampjs}
-	    <title>Hello, amphtml-import-tags!</title>
+    ```html
+    <!doctype html>
+    <html amp lang="en">
+      <head>
+        <meta charset="utf-8">
+        ${ampjs}
+        <title>Hello, amphtml-import-tags!</title>
 
-	    <!-- ..... -->
-	```
+        <!-- ..... -->
+    ```
+
+2.  Incorporate the package in your gulpfile:
+
+    ```js
+    const importTags = require('amphtml-import-tags').create();
+
+    gulp.task('tag', () => {
+      return gulp.src('*.html')
+          .pipe(importTags())
+          .pipe(gulp.dest('dist/'));
+    });
+    ```
+
+3.  Generated AMP HTML now includes any required `custom-element` `<script/>` tags:
+
+    ```html
+    <!doctype html>
+    <html amp lang="en">
+      <head>
+        <meta charset="utf-8">
+        <script async src="https://cdn.ampproject.org/v0.js"></script>
+        <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-latest.js"></script>
+        <title>Hello, amphtml-import-tags!</title>
+
+        <!-- ..... -->
+    ```
+
+### Using custom placeholder
+
+By default source files should use the placeholder `${ampjs}` to mark where `<script/>` tags should be inserted.
+
+To specify a different placeholder, pass an argument to `.create()`, for example:
 
 ```js
-const gulpAmpValidator = require('gulp-amphtml-validator');
+// Expects to find "[AMP-JS]" in source files.
+const importTags = require('amphtml-import-tags').create('[AMP-JS]');
 
-gulp.task('amphtml:validate', () => {
-  return gulp.src('*.html')
-    // Validate the input and attach the validation result to the "amp" property
-    // of the file object. 
-    .pipe(gulpAmpValidator.validate())
-    // Print the validation results to the console.
-    .pipe(gulpAmpValidator.format())
-    // Exit the process with error code (1) if an AMP validation error
-    // occurred.
-    .pipe(gulpAmpValidator.failAfterError());
-});
-```
-
-To treat warnings as errors, replace the last line of the validation closure with:
-
-```js
-// Exit the process with error code (1) if an AMP validation warning or
-// error occurred.
-.pipe(gulpAmpValidator.failAfterWarningOrError());
-
+// ...
 ```
 
 ## Release Notes
-
-### 1.0.2
-
-* Add failAfterWarningOrError option
-* Upgrade amphtml-validator version to 1.0.21
-
-### 1.0.1
-
-* Upgrade amphtml-validator version to 1.0.18
 
 ### 1.0.0
 
