@@ -68,6 +68,10 @@ const importTags = require('amphtml-import-tags').create('[AMP-JS]');
 
 ## Release Notes
 
+### 1.0.1
+
+* Version bump for release to npmjs.
+
 ### 1.0.0
 
 * initial release
