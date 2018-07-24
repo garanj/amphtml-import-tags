@@ -2,6 +2,8 @@
 
 A Gulp plugin for automating the import of required `custom-element` `<script/>` tags in [AMPHTML files](https://ampproject.org).
 
+![build](https://travis-ci.org/garanj/amphtml-import-tags.svg?branch=master)
+
 ## Installation
 
 Install package with NPM and add it to your development dependencies:
