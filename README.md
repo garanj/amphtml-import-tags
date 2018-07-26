@@ -34,7 +34,7 @@ npm install --save-dev amphtml-import-tags
 
     gulp.task('tag', () => {
       return gulp.src('*.html')
-          .pipe(importTags())
+          .pipe(importTags)
           .pipe(gulp.dest('dist/'));
     });
     ```
@@ -67,6 +67,10 @@ const importTags = require('amphtml-import-tags').create('[AMP-JS]');
 ```
 
 ## Release Notes
+
+### 1.0.2
+
+* Documentation bug fix.
 
 ### 1.0.1
 
