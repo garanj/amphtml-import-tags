@@ -1,6 +1,6 @@
 {
   "name": "amphtml-import-tags",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Imports required AMP HTML custom-elements into source files.",
   "main": "index.js",
   "scripts": {

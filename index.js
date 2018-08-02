@@ -13,11 +13,18 @@ const AMP_BASE_URL_ELEMENT = '<script async src="https://cdn.ampproject.org/v0.j
 const DEFAULT_AMP_PLACEHOLDER = '${ampjs}';
 
 // Maintain a set of amp-* tags for which no custom script tag is required.
-const AMP_EXCLUDED_TAGS = new Set(['amp-img', 'amp-web-push-widget']);
+const AMP_EXCLUDED_TAGS = new Set(['amp-img']);
 
 // Maintain a mapping of custom elements whose JS to include is not of the same
 // name. For example, using <amp-state> requires amp-bind JS to be included.
-const AMP_REMAPPED_TAGS = {'amp-state': 'amp-bind'};
+const AMP_REMAPPED_TAGS = {
+  'amp-state': 'amp-bind',
+  'amp-embed': 'amp-ad',
+  'amp-web-push-widget': 'amp-web-push',
+  'amp-story-page': 'amp-story',
+  'amp-story-bookend': 'amp-story',
+  'amp-story-grid-layer': 'amp-story',
+};
 
 // Regular expression for identifying use of AMP state within event definitions
 // in "on" attributes.
@@ -77,12 +84,38 @@ function addAmpCustomElementTags(file, placeholder) {
   if (containsAmpStateInAttribute(doc)) {
     requiredElements.add('amp-bind');
   }
+  // amp-access is used as an attribute within elements, for example:
+  // <div amp-access="expression">...</div>
   if (containsAmpAccessInAttribute(doc)) {
     requiredElements.add('amp-access');
     requiredElements.add('amp-analytics');
   }
+  // amp-access-laterpay uses a div with a specific ID:
+  // <div id="amp-access-laterpay-dialog" class="amp-access-laterpay"></div>
   if (containsAmpAccessLaterpayInAttribute(doc)) {
     requiredElements.add('amp-access-laterpay');
+  }
+  // amp-geo elements can specify that an amp-state element should be created,
+  // and use of amp-state requires amp-bind.
+  if (containsAmpGeoWithBind(doc)) {
+    requiredElements.add('amp-bind');
+  }
+  // amp-dynamic-css-classes creates amp-referer-* and amp-viewer classes in
+  // CSS. Look for whether these are used.
+  if (containsAmpRefererInStyleElement(doc)) {
+    requiredElements.add('amp-dynamic-css-classes');
+  }
+  // amp-mustache makes use of <template> elements for dynamic contents.
+  if (containsAmpMustacheTemplate(doc)) {
+    requiredElements.add('amp-mustache');
+  }
+  // amp-fx uses attributes of that name.
+  if (containsAmpFxCollection(doc)) {
+    requiredElements.add('amp-fx-collection');
+  }
+  // Lightbox gallery is identified by specific attributes being used.
+  if (containsAmpLightboxGallery(doc)) {
+    requiredElements.add('amp-lightbox-gallery');
   }
 
   const urls = [AMP_BASE_URL_ELEMENT,
@@ -159,6 +192,65 @@ function containsAmpAccessLaterpayInAttribute(doc) {
   return doc.querySelector('[id=\'amp-access-laterpay-dialog\']');
 }
 
+/**
+ * Identifies whether 'amp-referer-*' or 'amp-viewer' CSS classes are present in
+ * the AMP styles.
+ *
+ * @param {JSDOM} doc The DOM for the file.
+ * @return {boolean} true if use of the classes is present.
+ */
+function containsAmpRefererInStyleElement(doc) {
+  const styles = doc.querySelector('style[amp-custom]');
+  const content = styles ? styles.textContent : '';
+  return content.includes('amp-referrer-') || content.includes('amp-viewer');
+}
+
+/**
+ * Identifies whether an amp-geo element exists with the AmpBind property set.
+ *
+ * @param {JSDOM} doc The DOM for the file.
+ * @return {boolean} true if AmpBind is set.
+ */
+function containsAmpGeoWithBind(doc) {
+  const geos = Array.from(doc.querySelectorAll('amp-geo > script'));
+  for (let geo of geos) {
+    if (geo.textContent && geo.textContent.includes('AmpBind')) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Identifies whether the document contains any amp-mustache templates.
+ *
+ * @param {JSDOM} doc The DOM for the file.
+ * @return {boolean} true if any amp-mustache templates encountered.
+ */
+function containsAmpMustacheTemplate(doc) {
+  return doc.querySelector('template[type=\'amp-mustache\']');
+}
+
+/**
+ * Identifies whether the document contains any elements with amp-fx attributes.
+ *
+ * @param {JSDOM} doc The DOM for the file.
+ * @return {boolean} true if attributes found.
+ */
+function containsAmpFxCollection(doc) {
+  return doc.querySelector('[amp-fx]');
+}
+
+/**
+ * Identifies whether any elements contain any lightbox sttributes.
+ *
+ * @param {JSDOM} doc The DOM for the file.
+ * @return {boolean} true if attributes found.
+ */
+function containsAmpLightboxGallery(doc) {
+  return doc.querySelector('[lightbox]') 
+      || doc.querySelector('[lightbox-thumbnail-id]');
+}
 /**
  * Builds a script tag for a custom element.
  *

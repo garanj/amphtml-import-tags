@@ -68,6 +68,10 @@ const importTags = require('amphtml-import-tags').create('[AMP-JS]');
 
 ## Release Notes
 
+### 1.1.0
+
+* Added detection for more non-standard import scenarios.
+
 ### 1.0.2
 
 * Documentation bug fix.
