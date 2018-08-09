@@ -9,7 +9,7 @@ A Gulp plugin for automating the import of required `custom-element` `<script/>`
 Install package with NPM and add it to your development dependencies:
 
 ```
-npm install --save-dev amphtml-import-tags
+npm install --save-dev amphtml-autoscript
 ```
 
 ## Usage
@@ -48,7 +48,7 @@ npm install --save-dev amphtml-import-tags
         <meta charset="utf-8">
         <script async src="https://cdn.ampproject.org/v0.js"></script>
         <script async custom-element="amp-bind" src="https://cdn.ampproject.org/v0/amp-bind-latest.js"></script>
-        <title>Hello, amphtml-import-tags!</title>
+        <title>Hello, amphtml-autoscript!</title>
 
         <!-- ..... -->
     ```
