@@ -1,7 +1,7 @@
 const jsdom = require('jsdom');
 const through = require('through2');
 
-const PLUGIN_NAME = 'amphtml-import-tags';
+const PLUGIN_NAME = 'amphtml-autoscript';
 const PluginError = require('plugin-error');
 
 const {JSDOM} = jsdom;

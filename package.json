@@ -1,5 +1,5 @@
 {
-  "name": "amphtml-import-tags",
+  "name": "amphtml-autoscript",
   "version": "1.1.0",
   "description": "Imports required AMP HTML custom-elements into source files.",
   "main": "index.js",
@@ -13,9 +13,9 @@
   ],
   "author": "garanj",
   "license": "Apache-2.0",
-  "repository" : { 
-    "type" : "git", 
-    "url" : "https://github.com/garanj/amphtml-import-tags.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/garanj/amphtml-autoscript.git"
   },
   "devDependencies": {
     "assert": "^1.4.1",
