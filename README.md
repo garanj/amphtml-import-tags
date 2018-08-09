@@ -1,8 +1,8 @@
-# Gulp AMP HTML tag importer
+# Gulp AMP HTML script importer
 
 A Gulp plugin for automating the import of required `custom-element` `<script/>` tags in [AMPHTML files](https://ampproject.org).
 
-![build](https://travis-ci.org/garanj/amphtml-import-tags.svg?branch=master)
+![build](https://travis-ci.org/garanj/amphtml-autoscript.svg?branch=master)
 
 ## Installation
 
@@ -22,7 +22,7 @@ npm install --save-dev amphtml-import-tags
       <head>
         <meta charset="utf-8">
         ${ampjs}
-        <title>Hello, amphtml-import-tags!</title>
+        <title>Hello, amphtml-autoscript!</title>
 
         <!-- ..... -->
     ```
@@ -30,11 +30,11 @@ npm install --save-dev amphtml-import-tags
 2.  Incorporate the package in your gulpfile:
 
     ```js
-    const importTags = require('amphtml-import-tags').create();
+    const autoScript = require('amphtml-autoscript').create();
 
     gulp.task('tag', () => {
       return gulp.src('*.html')
-          .pipe(importTags)
+          .pipe(autoScript)
           .pipe(gulp.dest('dist/'));
     });
     ```
@@ -61,7 +61,7 @@ To specify a different placeholder, pass an argument to `.create()`, for example
 
 ```js
 // Expects to find "[AMP-JS]" in source files.
-const importTags = require('amphtml-import-tags').create('[AMP-JS]');
+const autoScript = require('amphtml-autoscript').create('[AMP-JS]');
 
 // ...
 ```
