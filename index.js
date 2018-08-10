@@ -26,6 +26,12 @@ const AMP_REMAPPED_TAGS = {
   'amp-story-grid-layer': 'amp-story',
 };
 
+// Some scripts are not imported with custom-element defined, but instead us
+// custom-template.
+const AMP_SCRIPT_TYPE_MAP = {
+  'amp-mustache': 'custom-template'
+};
+
 // Regular expression for identifying use of AMP state within event definitions
 // in "on" attributes.
 const AMP_BIND_ATTR_REGEX = /AMP\.(setState|pushState)/;
@@ -258,6 +264,7 @@ function containsAmpLightboxGallery(doc) {
  * @return {string} The <script> tag.
  */
 function createAmpCustomElementTag(tagName) {
-  return `<script async custom-element="${tagName}" ` +
+  const scriptType = AMP_SCRIPT_TYPE_MAP[tagName] || 'custom-element';
+  return `<script async ${scriptType}="${tagName}" ` +
       `src="https://cdn.ampproject.org/v0/${tagName}-latest.js"></script>`;
 }

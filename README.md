@@ -68,6 +68,14 @@ const autoScript = require('amphtml-autoscript').create('[AMP-JS]');
 
 ## Release Notes
 
+### 1.1.2
+
+* Fixed bug for `amp-mustache` to use attribute `custom-template`.
+
+### 1.1.1
+
+* Updated README following rename.
+
 ### 1.1.0
 
 * Added detection for more non-standard import scenarios.
