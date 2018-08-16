@@ -34,7 +34,7 @@ npm install --save-dev amphtml-autoscript
 
     gulp.task('tag', () => {
       return gulp.src('*.html')
-          .pipe(autoScript)
+          .pipe(autoScript())
           .pipe(gulp.dest('dist/'));
     });
     ```
@@ -67,6 +67,10 @@ const autoScript = require('amphtml-autoscript').create('[AMP-JS]');
 ```
 
 ## Release Notes
+
+### 1.2
+
+* Fixed bug in callback usage that caused stream write errors. Updated usage examples.
 
 ### 1.1.2
 

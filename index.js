@@ -53,19 +53,19 @@ module.exports.create = function(optPlaceholder) {
       + escapeRegex(placeholder));
 
   function runInclude(file, encoding, callback) {
-    if (file.isNull()) {
-      return callback(null, file);
-    }
     if (file.isStream()) {
       this.emit('error', new PluginError(PLUGIN_NAME,
           'Streams not supported!'));
     }
     if (file.isBuffer()) {
-      const modifiedFile = addAmpCustomElementTags(file, escapedPlaceholder);
-      return callback(null, modifiedFile);
+      file = addAmpCustomElementTags(file, escapedPlaceholder);
     }
+    return callback(null, file);
   }
-  return through.obj(runInclude);
+  var rv = function() {
+    return through.obj(runInclude);
+  };
+  return rv; 
 };
 
 /**
