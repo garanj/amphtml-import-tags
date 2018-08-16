@@ -68,6 +68,10 @@ const autoScript = require('amphtml-autoscript').create('[AMP-JS]');
 
 ## Release Notes
 
+### 1.2.1
+
+* Removed unnecessary dependencies.
+
 ### 1.2.0
 
 * Fixed bug in callback usage that caused stream write errors. Updated usage examples.
@@ -75,23 +79,3 @@ const autoScript = require('amphtml-autoscript').create('[AMP-JS]');
 ### 1.1.2
 
 * Fixed bug for `amp-mustache` to use attribute `custom-template`.
-
-### 1.1.1
-
-* Updated README following rename.
-
-### 1.1.0
-
-* Added detection for more non-standard import scenarios.
-
-### 1.0.2
-
-* Documentation bug fix.
-
-### 1.0.1
-
-* Version bump for release to npmjs.
-
-### 1.0.0
-
-* initial release
