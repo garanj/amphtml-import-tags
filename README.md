@@ -68,7 +68,7 @@ const autoScript = require('amphtml-autoscript').create('[AMP-JS]');
 
 ## Release Notes
 
-### 1.2
+### 1.2.0
 
 * Fixed bug in callback usage that caused stream write errors. Updated usage examples.
 
