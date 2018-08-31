@@ -53,20 +53,26 @@ npm install --save-dev amphtml-autoscript
         <!-- ..... -->
     ```
 
-### Using custom placeholder
+### Options
 
-By default source files should use the placeholder `${ampjs}` to mark where `<script/>` tags should be inserted.
+Options can be passed to `.create(options)` to change the operation in the following ways:
 
-To specify a different placeholder, pass an argument to `.create()`, for example:
-
-```js
-// Expects to find "[AMP-JS]" in source files.
-const autoScript = require('amphtml-autoscript').create('[AMP-JS]');
-
-// ...
+```javascript
+{
+  // Alternative placeholder to replace, e.g. [AMPJS], ${ampjs}, <<AMP-JS>>
+  placeholder: '...',
+  // Mode to operate in, either autoScript.MODES.PLACEHOLDER or autoScript.MODES.HEADER_INSERTION
+  // either replacing a string, or placing the elements at the end of the <head/> tag.
+  mode: autoScript.MODES.<value>
+}
 ```
 
 ## Release Notes
+
+### 1.3
+
+* Moved to using validator.
+* Added `HEADER_INSERTION` mode.
 
 ### 1.2.1
 
