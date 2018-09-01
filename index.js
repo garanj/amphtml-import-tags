@@ -45,10 +45,10 @@ const AMP_SCRIPT_TYPE_MAP = {
  *   mode: Overrides the default mode (MODES.PLACEHOLDER);
  * @return {!Transform} The created stream.Transform object.
  */
-module.exports.create = function(opt_options) {
+function create(opt_options) {
   function runInclude(file, encoding, callback) {
     if (file.isNull()) {
-      callback(null, file);
+      return callback(null, file);
     }
     if (file.isStream()) {
       this.emit('error', new PluginError(PLUGIN_NAME,
@@ -56,7 +56,10 @@ module.exports.create = function(opt_options) {
     }
     if (file.isBuffer()) {
       addIncludesToFile(file, opt_options).then((file) => {
-        callback(null, file);   
+        return callback(null, file);   
+      })
+      .catch(() => {
+        return callback(null, file); 
       });
     }
   }
@@ -74,10 +77,11 @@ module.exports.create = function(opt_options) {
  * @param {Object} opt_options See {@code create}.
  * @return {!Vinyl} The modified file.
  */
-module.exports.addIncludesToFile = async function addIncludesToFile(file,
+async function addIncludesToFile(file,
     opt_options) {
   const html = file.contents.toString();
-  file.contents = new Buffer(await this.addIncludesToHtml(html, opt_options));
+  const newHtml = await addIncludesToHtml(html, opt_options);
+  file.contents = new Buffer(newHtml);
   return file;
 };
 
@@ -94,7 +98,7 @@ module.exports.addIncludesToFile = async function addIncludesToFile(file,
  * @param {Object} opt_options See {@code create}.
  * @return {!Vinyl} The modified file.
  */
-module.exports.addIncludesToHtml = async function addIncludesToHtml(html,
+async function addIncludesToHtml(html,
     opt_options) {
   let instance = await amphtmlValidator.getInstance();
   VERSION_MAP = VERSION_MAP || await fetchComponentMap();
@@ -225,3 +229,7 @@ function createAmpCustomElementTag(tagName, version) {
   return `<script async ${scriptType}="${tagName}" ` +
       `src="https://cdn.ampproject.org/v0/${tagName}-${version}.js"></script>`;
 }
+
+module.exports.addIncludesToFile = addIncludesToFile;
+module.exports.addIncludesToHtml = addIncludesToHtml;
+module.exports.create = create;

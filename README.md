@@ -69,7 +69,11 @@ Options can be passed to `.create(options)` to change the operation in the follo
 
 ## Release Notes
 
-### 1.3
+### 1.3.1
+
+* Fixed bug in callback usage that caused stream write errors
+
+### 1.3.0
 
 * Moved to using validator.
 * Added `HEADER_INSERTION` mode.
@@ -77,11 +81,3 @@ Options can be passed to `.create(options)` to change the operation in the follo
 ### 1.2.1
 
 * Removed unnecessary dependencies.
-
-### 1.2.0
-
-* Fixed bug in callback usage that caused stream write errors. Updated usage examples.
-
-### 1.1.2
-
-* Fixed bug for `amp-mustache` to use attribute `custom-template`.
