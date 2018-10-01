@@ -1,6 +1,7 @@
 const amphtmlValidator = require('amphtml-validator');
 const through = require('through2');
 const fetch = require('node-fetch');
+const fs = require('fs');
 
 const REGEX_EXTENSION_DIR = /extensions\/(amp-[^\/]+)\/([0-9]+\.[0-9]+)$/;
 const GITHUB_AMPHTML_TREE_URL = 'https://api.github.com/repos/ampproject/amphtml/git/trees/master?recursive=1';
@@ -9,6 +10,7 @@ const PLUGIN_NAME = 'amphtml-autoscript';
 const PluginError = require('plugin-error');
 
 const AMP_BASE_URL_ELEMENT = '<script async src="https://cdn.ampproject.org/v0.js"></script>';
+const COMPONENTS_MAP_PATH = __dirname + '/components.json';
 
 // This module has two modes of operation:
 // - Placeholder:      The module searches for a string, e.g. ${ampjs}.
@@ -101,8 +103,11 @@ async function addIncludesToFile(file,
 async function addIncludesToHtml(html,
     opt_options) {
   let instance = await amphtmlValidator.getInstance();
-  VERSION_MAP = VERSION_MAP || await fetchComponentMap();
   const options = opt_options || {};
+  if (options.updateComponentsMap) {
+    await updateComponentMap();
+  }
+  const versionMap = await readComponentsMap(COMPONENTS_MAP_PATH);
 
   const result = instance.validateString(html);
 
@@ -135,7 +140,7 @@ async function addIncludesToHtml(html,
                 || err.code === 'ATTR_MISSING_REQUIRED_EXTENSION')});
     for (let tagError of tagErrors) {
       const tagName = tagError.params[1];
-      const tagVersion = VERSION_MAP[tagName];
+      const tagVersion = versionMap[tagName];
 
       if (!tagVersion) {
         throw Error('Unknown AMP Component ' + tagName);
@@ -189,10 +194,8 @@ function addScriptUrlsByHeaderInsertion(html, missingScriptUrls) {
 /**
  * Create a map from component to version number, based on GitHub directory
  * structure.
- *
- * @return {Object}
  */
-async function fetchComponentMap() {
+async function updateComponentMap() {
   const response = await fetch(GITHUB_AMPHTML_TREE_URL);
   const data = await response.json();
   const pairs = data.tree.map((item) => item.path.match(REGEX_EXTENSION_DIR))
@@ -204,8 +207,44 @@ async function fetchComponentMap() {
       versionMap[pair[0]] = pair[1];
     }
   });
-  return versionMap;
+  writeComponentsMap(COMPONENTS_MAP_PATH, versionMap);
 };
+
+/**
+ * Writes a component map to the file system.
+ *
+ * @param {string} path The path to the file to write to.
+ * @param {Object} componentsMap The map of components to versions.
+ * @return {number} The length of data written.
+ */
+function writeComponentsMap(path, componentsMap) {
+  return new Promise((resolve, reject) => {
+    const data = JSON.stringify(componentsMap);
+    fs.writeFile(path, data, (err) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(data.length);
+    });
+  });
+}
+
+/**
+ * Reads a component map from the file system.
+ *
+ * @param {string} path The path to the file to write to.
+ * @return {Object} The map of components to versions.
+ */
+async function readComponentsMap(path) {
+  return new Promise((resolve, reject) => {
+    fs.readFile(path, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(JSON.parse(data));
+    });
+  });
+}
 
 /**
  * Escapes a string such that it can be safely used in a regular expression.

@@ -63,11 +63,17 @@ Options can be passed to `.create(options)` to change the operation in the follo
   placeholder: '...',
   // Mode to operate in, either autoScript.MODES.PLACEHOLDER or autoScript.MODES.HEADER_INSERTION
   // either replacing a string, or placing the elements at the end of the <head/> tag.
-  mode: autoScript.MODES.<value>
+  mode: autoScript.MODES.<value>,
+  // Force the update of the AMP components map:
+  updateComponentsMap: true
 }
 ```
 
 ## Release Notes
+
+### 1.4.0
+
+* Added file to store snapshot of component versions.
 
 ### 1.3.1
 
