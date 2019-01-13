@@ -65,7 +65,7 @@ Options can be passed to `.create(options)` to change the operation in the follo
   // either replacing a string, or placing the elements at the end of the <head/> tag.
   mode: autoScript.MODES.<value>,
   // Force the update of the AMP components map, which will otherwise not be fetched again.
-  updateComponentsMap: true
+  updateComponentsMap: true,
   // Force use of 'latest' for all components
   forceLatest: true
 }
