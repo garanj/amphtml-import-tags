@@ -81,8 +81,9 @@ function create(opt_options) {
  */
 async function addIncludesToFile(file,
     opt_options) {
+  const overrideMap = await readComponentsMap('./amp-versions.json');
   const html = file.contents.toString();
-  const newHtml = await addIncludesToHtml(html, opt_options);
+  const newHtml = await addIncludesToHtml(html, overrideMap, opt_options);
   file.contents = new Buffer(newHtml);
   return file;
 };
@@ -97,10 +98,11 @@ async function addIncludesToFile(file,
  *    listings.
  *
  * @param {!Vinyl} file The file to add script tags to.
+ * @param {Object} overrideMap Lookup of component versions for this project.
  * @param {Object} opt_options See {@code create}.
  * @return {!Vinyl} The modified file.
  */
-async function addIncludesToHtml(html,
+async function addIncludesToHtml(html, overrideMap,
     opt_options) {
   let instance = await amphtmlValidator.getInstance();
   const options = opt_options || {};
@@ -140,7 +142,13 @@ async function addIncludesToHtml(html,
                 || err.code === 'ATTR_MISSING_REQUIRED_EXTENSION')});
     for (let tagError of tagErrors) {
       const tagName = tagError.params[1];
-      const tagVersion = versionMap[tagName];
+      if (overrideMap[tagName]) {
+        var tagVersion = overrideMap[tagName];
+      } else if (options.forceLatest) {
+        var tagVersion = 'latest';
+      } else if (versionMap[tagName]) {
+        var tagVersion = versionMap[tagName];
+      }
 
       if (!tagVersion) {
         throw Error('Unknown AMP Component ' + tagName);
@@ -239,7 +247,7 @@ async function readComponentsMap(path) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, (err, data) => {
       if (err) {
-        return reject(err);
+        return resolve({});
       }
       resolve(JSON.parse(data));
     });

@@ -85,8 +85,10 @@ describe('amphtml-import-tags', function() {
 
   it('should insert amp-access when script ID found.', function() {
     const inFile = createFile(AMP_ACCESS_SCRIPT_IN_FILE);
-
-    return autoScript.addIncludesToFile(inFile).then(function(outFile) {
+    const options = {
+      forceLatest: true
+    };
+    return autoScript.addIncludesToFile(inFile, options).then(function(outFile) {
       assert(fileContainsCustomElements(outFile, ['amp-access']));
     });
   });

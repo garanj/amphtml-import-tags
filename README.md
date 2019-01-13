@@ -64,12 +64,26 @@ Options can be passed to `.create(options)` to change the operation in the follo
   // Mode to operate in, either autoScript.MODES.PLACEHOLDER or autoScript.MODES.HEADER_INSERTION
   // either replacing a string, or placing the elements at the end of the <head/> tag.
   mode: autoScript.MODES.<value>,
-  // Force the update of the AMP components map:
+  // Force the update of the AMP components map, which will otherwise not be fetched again.
   updateComponentsMap: true
+  // Force use of 'latest' for all components
+  forceLatest: true
 }
 ```
 
+### Local component version overrides
+
+Under normal operation, the component version will be read from `components.json`, part of the
+module. This will not update unless forced using the options above.
+
+To specify a version local to your project, create a `amp-versions.json` file
+in your build working directory.
+
 ## Release Notes
+
+### 1.5.0
+
+* Added `forceLatest` and local component versions override.
 
 ### 1.4.0
 
