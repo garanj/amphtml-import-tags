@@ -77,7 +77,15 @@ Under normal operation, the component version will be read from `components.json
 module. This will not update unless forced using the options above.
 
 To specify a version local to your project, create a `amp-versions.json` file
-in your build working directory.
+in your build working directory, specifying desired versions e.g.
+
+```json
+{
+  "amp-carousel": "0.2"
+}
+```
+
+NOTE: versions in `amp-versions.json` will take precedence over `forceLatest`.
 
 ## Release Notes
 
