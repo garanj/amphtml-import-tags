@@ -19,11 +19,11 @@
   },
   "devDependencies": {
     "assert": "^1.4.1",
-    "eslint": "^5.2.0",
+    "eslint": "^5.14.0",
     "eslint-config-google": "^0.9.1",
+    "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
-    "vinyl": "^2.2.0",
-    "jsdom": "^11.11.0"
+    "vinyl": "^2.2.0"
   },
   "dependencies": {
     "amphtml-validator": "^1.0.23",
