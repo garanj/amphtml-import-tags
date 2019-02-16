@@ -89,6 +89,10 @@ NOTE: versions in `amp-versions.json` will take precedence over `forceLatest`.
 
 ## Release Notes
 
+### 1.5.1
+
+* Updated version dependencies.
+
 ### 1.5.0
 
 * Added `forceLatest` and local component versions override.
