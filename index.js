@@ -84,7 +84,7 @@ async function addIncludesToFile(file,
   const overrideMap = await readComponentsMap('./amp-versions.json');
   const html = file.contents.toString();
   const newHtml = await addIncludesToHtml(html, overrideMap, opt_options);
-  file.contents = new Buffer(newHtml);
+  file.contents = new Buffer.from(newHtml);
   return file;
 };
 
@@ -127,8 +127,7 @@ async function addIncludesToHtml(html, overrideMap,
   if (result.status === 'FAIL') {
     // Determine whether the base AMP script element is missing.
     for (err of result.errors) {
-      if (err.category === 'MANDATORY_AMP_TAG_MISSING_OR_INCORRECT'
-          && err.code === 'MANDATORY_TAG_MISSING'
+      if (err.code === 'MANDATORY_TAG_MISSING'
           && err.params && err.params[0] === 'amphtml engine v0.js script') {
         missingScriptUrls.add(AMP_BASE_URL_ELEMENT);
         break;
@@ -137,8 +136,7 @@ async function addIncludesToHtml(html, overrideMap,
     // Filter for only those errors indicating a missing script tag.
     const tagErrors = result.errors
         .filter(err => {
-            return err.category === 'MANDATORY_AMP_TAG_MISSING_OR_INCORRECT'
-                && (err.code === 'MISSING_REQUIRED_EXTENSION' 
+            return (err.code === 'MISSING_REQUIRED_EXTENSION'
                 || err.code === 'ATTR_MISSING_REQUIRED_EXTENSION')});
     for (let tagError of tagErrors) {
       const tagName = tagError.params[1];

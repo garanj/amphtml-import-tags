@@ -169,7 +169,7 @@ describe('amphtml-import-tags', function() {
 function createFile(path) {
   return new File({
     path: path,
-    contents: new Buffer(fs.readFileSync(path, 'utf8')),
+    contents: new Buffer.from(fs.readFileSync(path, 'utf8')),
   });
 }
 

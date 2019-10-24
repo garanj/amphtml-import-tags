@@ -89,6 +89,10 @@ NOTE: versions in `amp-versions.json` will take precedence over `forceLatest`.
 
 ## Release Notes
 
+### 1.5.2
+
+* Updated to reflect changes in amphtml-validator error category reporting.
+
 ### 1.5.1
 
 * Updated version dependencies.
@@ -109,7 +113,3 @@ NOTE: versions in `amp-versions.json` will take precedence over `forceLatest`.
 
 * Moved to using validator.
 * Added `HEADER_INSERTION` mode.
-
-### 1.2.1
-
-* Removed unnecessary dependencies.
